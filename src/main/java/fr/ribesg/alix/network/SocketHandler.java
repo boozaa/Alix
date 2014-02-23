@@ -20,8 +20,9 @@ public class SocketHandler {
 	/* package */ static final int CHECK_DELAY = 100;
 	/* package */ static final int SEND_LIMIT  = 50;
 
-	private final String url;
-	private final int    port;
+	private final String  url;
+	private final int     port;
+	private final boolean ssl;
 
 	private final Server server;
 
@@ -33,13 +34,22 @@ public class SocketHandler {
 	private Thread receiverThread;
 
 	public SocketHandler(final Server server, final String url, final int port) {
+		this(server, url, port, false);
+	}
+
+	public SocketHandler(final Server server, final String url, final int port, final boolean ssl) {
 		this.url = url;
 		this.port = port;
 		this.server = server;
+		this.ssl = ssl;
 	}
 
 	public void connect() throws IOException {
-		this.socket = new Socket(this.url, this.port);
+		if (this.ssl) {
+			this.socket = SSLHandler.getTrustingSSLSocket(this.url, this.port);
+		} else {
+			this.socket = new Socket(this.url, this.port);
+		}
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 

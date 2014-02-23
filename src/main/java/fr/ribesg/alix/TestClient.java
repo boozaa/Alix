@@ -13,11 +13,11 @@ import fr.ribesg.alix.api.message.PrivMsgMessage;
 public class TestClient {
 
 	public static void main(final String args[]) {
-		new Client("SomeBot") {
+		new Client("SSLBot") {
 
 			@Override
 			protected void load() {
-				final Server server = new Server(this, "irc.esper.net", 5555);
+				final Server server = new Server(this, "irc.esper.net", 6697, true);
 				server.addChannel("#ribesg");
 				this.getServers().add(server);
 			}

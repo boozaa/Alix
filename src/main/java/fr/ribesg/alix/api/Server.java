@@ -34,6 +34,11 @@ public class Server {
 	private final int port;
 
 	/**
+	 * If this Server should be joined other SSL or not
+	 */
+	private final boolean useSSL;
+
+	/**
 	 * Channels on which the Client is connected or
 	 * will be connected on this Server
 	 */
@@ -52,25 +57,30 @@ public class Server {
 	/**
 	 * Main constructor.
 	 *
-	 * @param url  the url of this Server (IP or FQDN)
-	 * @param port the port of this Server
+	 * @param client the Client this Server is / will be connected to
+	 * @param url    the url of this Server (IP or FQDN)
+	 * @param port   the port of this Server
+	 * @param useSSL if this connection uses / will use SSL
 	 */
-	public Server(final Client client, final String url, final int port) {
+	public Server(final Client client, final String url, final int port, final boolean useSSL) {
 		this.client = client;
 		this.url = url;
 		this.port = port;
+		this.useSSL = useSSL;
 		this.channels = new HashMap<>();
 		this.socket = null;
 		this.connected = false;
 	}
 
 	/**
-	 * Constructor with default port 6667
+	 * Convenient constructor for SSL-free connection.
 	 *
-	 * @param url the url of this Server (IP or FQDN)
+	 * @param client the Client this Server is / will be connected to
+	 * @param url    the url of this Server (IP or FQDN)
+	 * @param port   the port of this Server
 	 */
-	public Server(final Client client, final String url) {
-		this(client, url, 6667);
+	public Server(final Client client, final String url, final int port) {
+		this(client, url, port, false);
 	}
 
 	/**
@@ -144,6 +154,15 @@ public class Server {
 	 */
 	public int getPort() {
 		return port;
+	}
+
+	/**
+	 * Gets if this connection uses / will use SSL.
+	 *
+	 * @return true if this connection uses / will use SSL, false otherwise
+	 */
+	public boolean useSsl() {
+		return useSSL;
 	}
 
 	/**
